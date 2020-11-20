@@ -10,6 +10,7 @@ pyjwt = "*"
 django-heroku = "*"
 gunicorn = "*"
 mysqlclient = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 
