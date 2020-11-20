@@ -133,7 +133,7 @@ USE_TZ = True
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 
 # CORS-HEADERS-WHITELIST
-CORS_ALLOWED_ORIGINS = []
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
