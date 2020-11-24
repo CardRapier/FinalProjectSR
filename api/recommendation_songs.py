@@ -34,8 +34,8 @@ class Recommendation_Songs():
             populars.extend(self.recommenderSong(1, populars[i].song_title))
         return populars
 
-    def recommendate_populars(self):
-        populars = []
+    def recommendate_most_liked(self):
+        most_liked = []
         recommendated = []
         for i in range(0, 3):
             ran = 0
@@ -45,8 +45,8 @@ class Recommendation_Songs():
             popular_song = self.popular_songs[ran]
             song = Song(song_id=popular_song.song_id, song_title=popular_song.song_title,
                         song_artist=popular_song.song_artist, song_text=popular_song.song_text)
-            populars.append(song)
-        return populars
+            most_liked.append(song)
+        return most_liked
 
     def processing(self):
         self.data = pd.DataFrame(

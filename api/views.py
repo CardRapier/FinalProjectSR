@@ -21,6 +21,7 @@ def apiOverview(request):
         'songs-routes': {
             'List': '/songs/',
             'Detail View': '/song/<str:pk>/',
+            'Search': 'search/song/',
             'Create': '/song-create/',
             'Update': '/song-update/<str:pk>/',
             'Delete': '/song-delete/<str:pk>/'
@@ -28,6 +29,7 @@ def apiOverview(request):
         'movies-routes': {
             'List': '/movies/',
             'Detail View': '/movie/<str:pk>/',
+            'Search': 'search/movie/',
             'Create': '/movie-create/',
             'Update': '/movie-update/<str:pk>/',
             'Delete': '/movie-delete/<str:pk>/'
@@ -35,6 +37,7 @@ def apiOverview(request):
         'books-routes': {
             'List': '/books/',
             'Detail View': '/book/<str:pk>/',
+            'Search': 'search/book/',
             'Create': '/book-create/',
             'Update': '/book-update/<str:pk>/',
             'Delete': '/book-delete/<str:pk>/'
@@ -79,6 +82,15 @@ def songList(request):
 def songDetail(request, pk):
     songs = Song.objects.get(song_id=pk)
     serializer = SongSerializer(songs, many=False)
+    return Response(serializer.data, status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def songSearch(request):
+    search = request.data['search']
+    songs = Song.objects.raw(
+        'SELECT * FROM api_song WHERE song_title REGEXP %s or song_artist REGEXP %s LIMIT 20', [search, search])
+    serializer = SongSerializer(songs, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 
 
@@ -128,6 +140,15 @@ def movieDetail(request, pk):
 
 
 @api_view(['POST'])
+def movieSearch(request):
+    search = request.data['search']
+    movies = Movie.objects.raw(
+        'SELECT * FROM api_movie WHERE movie_title REGEXP %s LIMIT 20', [search])
+    serializer = MovieSerializer(movies, many=True)
+    return Response(serializer.data, status.HTTP_200_OK)
+
+
+@api_view(['POST'])
 def movieCreate(request):
     serializer = MovieSerializer(data=request.data)
     if serializer.is_valid():
@@ -173,6 +194,15 @@ def bookDetail(request, pk):
 
 
 @api_view(['POST'])
+def bookSearch(request):
+    search = request.data['search']
+    books = Book.objects.raw(
+        'SELECT * FROM api_book WHERE book_title REGEXP %s or book_authors REGEXP %s LIMIT 20', [search, search])
+    serializer = BookSerializer(books, many=True)
+    return Response(serializer.data, status.HTTP_200_OK)
+
+
+@api_view(['POST'])
 def bookCreate(request):
     serializer = BookSerializer(data=request.data)
     if serializer.is_valid():
@@ -212,8 +242,8 @@ def book_ratingList(request):
 
 
 @api_view(['GET'])
-def book_ratingDetail(request, pk):
-    rating = Book_Rating.objects.get(id=pk)
+def book_ratingDetail(request,  pk, pk2):
+    rating = Book_Rating.objects.get(user_id=pk, book_id=pk2)
     serializer = Book_RatingSerializer(rating, many=False)
     return Response(serializer.data, status.HTTP_200_OK)
 
@@ -229,8 +259,8 @@ def book_ratingCreate(request):
 
 
 @api_view(['POST'])
-def book_ratingUpdate(request, pk):
-    rating = Book_Rating.objects.get(id=pk)
+def book_ratingUpdate(request,  pk, pk2):
+    rating = Book_Rating.objects.get(user_id=pk, book_id=pk2)
     serializer = Book_RatingSerializer(instance=rating, data=request.data)
 
     if serializer.is_valid():
@@ -258,8 +288,8 @@ def movie_ratingList(request):
 
 
 @api_view(['GET'])
-def movie_ratingDetail(request, pk):
-    rating = Movie_Rating.objects.get(id=pk)
+def movie_ratingDetail(request,  pk, pk2):
+    rating = Movie_Rating.objects.get(user_id=pk, movie_id=pk2)
     serializer = Movie_RatingSerializer(rating, many=False)
     return Response(serializer.data, status.HTTP_200_OK)
 
@@ -275,8 +305,8 @@ def movie_ratingCreate(request):
 
 
 @api_view(['POST'])
-def movie_ratingUpdate(request, pk):
-    rating = Movie_Rating.objects.get(id=pk)
+def movie_ratingUpdate(request,  pk, pk2):
+    rating = Movie_Rating.objects.get(user_id=pk, movie_id=pk2)
     serializer = Movie_RatingSerializer(instance=rating, data=request.data)
 
     if serializer.is_valid():
@@ -304,8 +334,8 @@ def song_ratingList(request):
 
 
 @api_view(['GET'])
-def song_ratingDetail(request, pk):
-    rating = Song_Rating.objects.get(id=pk)
+def song_ratingDetail(request, pk, pk2):
+    rating = Song_Rating.objects.get(user_id=pk, song_id=pk2)
     serializer = Song_RatingSerializer(rating, many=False)
     return Response(serializer.data, status.HTTP_200_OK)
 
@@ -321,8 +351,8 @@ def song_ratingCreate(request):
 
 
 @api_view(['POST'])
-def song_ratingUpdate(request, pk):
-    rating = Song_Rating.objects.get(id=pk)
+def song_ratingUpdate(request, pk, pk2):
+    rating = Song_Rating.objects.get(user_id=pk, song_id=pk2)
     serializer = Song_RatingSerializer(instance=rating, data=request.data)
 
     if serializer.is_valid():
@@ -338,6 +368,8 @@ def song_ratingDelete(request, pk):
     rating.delete()
 
     return Response("Has been deleted succesfuly", status.HTTP_200_OK)
+
+##### Song Recommendation End-Points ######
 
 
 @api_view(['GET'])
@@ -356,6 +388,6 @@ def song_recommendation_populars(request):
 
 @api_view(['GET'])
 def song_recommendation_most_liked(request):
-    recommendation = recommendation_song.recommendate_populars()
+    recommendation = recommendation_song.recommendate_most_liked()
     serializer = SongSerializer(recommendation, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
