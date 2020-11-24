@@ -7,16 +7,16 @@ from django.contrib.auth.models import User
 class Movie(models.Model):
     movie_id = models.AutoField(primary_key=True)
     movie_genres = models.TextField(default="")
-    movie_popularity = models.FloatField()
-    movie_title = models.CharField(default="", max_length=50)
+    movie_title = models.CharField(default="", max_length=256)
     movie_overview = models.TextField(default="")
     movie_vote_average = models.FloatField()
+    movie_cover_url = models.TextField(default="")
 
 
 class Song(models.Model):
     song_id = models.AutoField(primary_key=True)
     song_artist = models.CharField(default="", max_length=50)
-    song_title = models.CharField(default="", max_length=50)
+    song_title = models.CharField(default="", max_length=256)
     song_text = models.TextField(default="")
 
 
