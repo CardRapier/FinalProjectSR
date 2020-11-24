@@ -4,8 +4,15 @@ from .models import Song, Movie, Book, Book_Rating, Movie_Rating, Song_Rating
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-
+from .recommendation_songs import Recommendation_Songs
 # Create your views here.
+
+songs = Song.objects.raw('SELECT api_song.* FROM api_song LIMIT 1000')
+songs_by_popularity = Song.objects.raw(
+    'SELECT api_song.*, SUM(api_song_rating.rating)/count(api_song_rating.rating) AS average FROM api_song, api_song_rating WHERE api_song.song_id=api_song_rating.song_id_id GROUP BY api_song.song_id ORDER BY average DESC LIMIT 100')
+song_ratings = Song_Rating.objects.all()
+recommendation_song = Recommendation_Songs(
+    songs, songs_by_popularity, song_ratings)
 
 
 @api_view(['GET'])
@@ -331,3 +338,10 @@ def song_ratingDelete(request, pk):
     rating.delete()
 
     return Response("Has been deleted succesfuly", status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def song_recomendation(request):
+    recommendation = recommendation_song.recommendate()
+    serializer = SongSerializer(recommendation, many=True)
+    return Response(serializer.data, status.HTTP_200_OK)

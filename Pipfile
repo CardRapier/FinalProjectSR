@@ -11,6 +11,10 @@ django-heroku = "*"
 gunicorn = "*"
 mysqlclient = "*"
 django-cors-headers = "*"
+pandas = "*"
+scikit-learn = "*"
+numpy = "==1.19.3"
+scipy = "==1.5.4"
 
 [dev-packages]
 

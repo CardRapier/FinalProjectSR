@@ -58,4 +58,8 @@ urlpatterns = [
          views.song_ratingUpdate, name="song_rating-update"),
     path('song_rating-delete/<str:pk>/',
          views.song_ratingDelete, name="song_rating-delete"),
+
+    # Recomendatinos
+    path('recomendation/songs/',
+         views.song_recomendation, name="songs_recomendation"),
 ]
