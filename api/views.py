@@ -6,13 +6,20 @@ from rest_framework.response import Response
 from rest_framework import status
 from .recommendation_songs import Recommendation_Songs
 # Create your views here.
+from django.db import connection
 
+max_value = 0
+with connection.cursor() as cursor:
+    cursor.execute("SELECT MAX(rating) FROM api_song_rating")
+    max_value = cursor.fetchone()
 songs = Song.objects.raw('SELECT api_song.* FROM api_song LIMIT 1000')
-songs_by_popularity = Song.objects.raw(
-    'SELECT api_song.*, SUM(api_song_rating.rating)/count(api_song_rating.rating) AS average FROM api_song, api_song_rating WHERE api_song.song_id=api_song_rating.song_id_id GROUP BY api_song.song_id ORDER BY average DESC LIMIT 100')
+songs_most_liked = Song.objects.raw(
+    'SELECT api_song.*, SUM(api_song_rating.rating)/count(api_song_rating.rating) AS average FROM api_song, api_song_rating WHERE api_song.song_id=api_song_rating.song_id_id GROUP BY api_song.song_id ORDER BY average DESC LIMIT 20')
+song_by_popularity = Song.objects.raw(
+    'SELECT api_song.*, ((SUM(api_song_rating.rating)/(COUNT(api_song_rating.rating))/8)*10) AS coun FROM api_song, api_song_rating WHERE api_song.song_id = api_song_rating.song_id_id GROUP BY api_song.song_id ORDER BY coun DESC LIMIT 20')
 song_ratings = Song_Rating.objects.all()
 recommendation_song = Recommendation_Songs(
-    songs, songs_by_popularity, song_ratings)
+    songs, songs_most_liked, song_ratings, song_by_popularity)
 
 
 @api_view(['GET'])
@@ -21,7 +28,7 @@ def apiOverview(request):
         'songs-routes': {
             'List': '/songs/',
             'Detail View': '/song/<str:pk>/',
-            'Search': 'search/song/',
+            'Search': {'search/song/', 'body=search'},
             'Create': '/song-create/',
             'Update': '/song-update/<str:pk>/',
             'Delete': '/song-delete/<str:pk>/'
@@ -29,7 +36,7 @@ def apiOverview(request):
         'movies-routes': {
             'List': '/movies/',
             'Detail View': '/movie/<str:pk>/',
-            'Search': 'search/movie/',
+            'Search': {'search/movie/', 'body=search'},
             'Create': '/movie-create/',
             'Update': '/movie-update/<str:pk>/',
             'Delete': '/movie-delete/<str:pk>/'
@@ -37,7 +44,7 @@ def apiOverview(request):
         'books-routes': {
             'List': '/books/',
             'Detail View': '/book/<str:pk>/',
-            'Search': 'search/book/',
+            'Search': {'search/book/', 'body=search'},
             'Create': '/book-create/',
             'Update': '/book-update/<str:pk>/',
             'Delete': '/book-delete/<str:pk>/'
@@ -372,9 +379,10 @@ def song_ratingDelete(request, pk):
 ##### Song Recommendation End-Points ######
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def song_recommendation(request):
-    recommendation = recommendation_song.recommendate()
+    id = request.data['id']
+    recommendation = recommendation_song.recommendate(id)
     serializer = SongSerializer(recommendation, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 
