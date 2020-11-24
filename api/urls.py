@@ -64,6 +64,6 @@ urlpatterns = [
          views.song_recommendation, name="songs_recommendation"),
     path('recommendation/songs/populars/',
          views.song_recommendation_populars, name="songs_recommendation_populars"),
-    path('recommendation/songs/populars/',
-         views.song_recommendation_populars, name="songs_recommendation_populars"),
+    path('recommendation/songs/most-liked/',
+         views.song_recommendation_most_liked, name="songs_recommendation_most-liked"),
 ]
