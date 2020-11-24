@@ -34,6 +34,20 @@ class Recommendation_Songs():
             populars.extend(self.recommenderSong(1, populars[i].song_title))
         return populars
 
+    def recommendate_populars(self):
+        populars = []
+        recommendated = []
+        for i in range(0, 3):
+            ran = 0
+            while (ran in recommendated):
+                ran = random.randint(0, len(self.popular_songs) - 1)
+            recommendated.append(ran)
+            popular_song = self.popular_songs[ran]
+            song = Song(song_id=popular_song.song_id, song_title=popular_song.song_title,
+                        song_artist=popular_song.song_artist, song_text=popular_song.song_text)
+            populars.append(song)
+        return populars
+
     def processing(self):
         self.data = pd.DataFrame(
             map(lambda x: [x.song_artist, x.song_title, x.song_text, x.song_id], self.songs), columns=["song_artist", "song_title", "song_text", "song_id"])

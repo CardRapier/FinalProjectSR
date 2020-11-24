@@ -62,4 +62,6 @@ urlpatterns = [
     # Recomendatinos
     path('recomendation/songs/',
          views.song_recomendation, name="songs_recomendation"),
+    path('recomendation/songs/populars/',
+         views.song_recomendation, name="songs_recomendation"),
 ]

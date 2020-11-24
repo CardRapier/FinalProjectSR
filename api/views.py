@@ -345,3 +345,10 @@ def song_recomendation(request):
     recommendation = recommendation_song.recommendate()
     serializer = SongSerializer(recommendation, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def song_recomendation_populars(request):
+    recommendation = recommendation_song.recommendate_populars()
+    serializer = SongSerializer(recommendation, many=True)
+    return Response(serializer.data, status.HTTP_200_OK)
