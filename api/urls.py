@@ -63,5 +63,5 @@ urlpatterns = [
     path('recomendation/songs/',
          views.song_recomendation, name="songs_recomendation"),
     path('recomendation/songs/populars/',
-         views.song_recomendation, name="songs_recomendation"),
+         views.song_recomendation_populars, name="songs_recomendation"),
 ]
