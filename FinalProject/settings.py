@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = ')qi-ro+u1xzeogy143xl+*k3vl)ba4hyv!5i_a#w7y#2b@1c=m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG")
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = ['*']
 
@@ -89,7 +89,6 @@ WSGI_APPLICATION = 'FinalProject.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-print(env("NAME"))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -137,7 +136,7 @@ USE_L10N = True
 USE_TZ = True
 
 # JWT
-JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
+JWT_SECRET_KEY = env("JWT_SECRET_KEY")
 
 # CORS-HEADERS-WHITELIST
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]

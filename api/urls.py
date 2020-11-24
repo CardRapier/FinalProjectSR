@@ -60,8 +60,10 @@ urlpatterns = [
          views.song_ratingDelete, name="song_rating-delete"),
 
     # Recomendatinos
-    path('recomendation/songs/',
-         views.song_recomendation, name="songs_recomendation"),
-    path('recomendation/songs/populars/',
-         views.song_recomendation_populars, name="songs_recomendation"),
+    path('recommendation/songs/',
+         views.song_recommendation, name="songs_recommendation"),
+    path('recommendation/songs/populars/',
+         views.song_recommendation_populars, name="songs_recommendation_populars"),
+    path('recommendation/songs/populars/',
+         views.song_recommendation_populars, name="songs_recommendation_populars"),
 ]
