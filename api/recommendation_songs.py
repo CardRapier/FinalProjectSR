@@ -49,7 +49,7 @@ class Recommendation_Songs():
     def recommendate_most_liked(self):
         most_liked = []
         recommendated = []
-        for i in range(0, 3):
+        for i in range(0, len(self.most_liked)):
             ran = 0
             while (ran in recommendated):
                 ran = random.randint(0, len(self.most_liked) - 1)
