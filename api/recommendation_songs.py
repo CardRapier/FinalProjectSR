@@ -91,7 +91,9 @@ class Recommendation_Songs():
 
     def recommenderSong(self, top, song):
         songs_to_recommendate = []
+        print(song)
         idx = self.indices[song]
+        print(idx)
         ss = list(enumerate(self.sim_cos_song[idx]))
         ss = sorted(ss, key=lambda x: x[1], reverse=True)
         ss = ss[1:top+1]
