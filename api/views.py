@@ -16,9 +16,9 @@ with connection.cursor() as cursor:
     max_value_songs = cursor.fetchone()
 songs = Song.objects.raw('SELECT api_song.* FROM api_song')
 songs_most_liked = Song.objects.raw(
-    'SELECT api_song.*, SUM(api_song_rating.rating)/count(api_song_rating.rating) AS average FROM api_song, api_song_rating WHERE api_song.song_id=api_song_rating.song_id_id GROUP BY api_song.song_id ORDER BY average DESC LIMIT 20')
+    'SELECT api_song.*, SUM(api_song_rating.rating)/count(api_song_rating.rating) AS average FROM api_song, api_song_rating WHERE api_song.song_id=api_song_rating.song_id_id GROUP BY api_song.song_id ORDER BY average DESC')
 song_by_popularity = Song.objects.raw(
-    'SELECT api_song.*, ((SUM(api_song_rating.rating)/(COUNT(api_song_rating.rating))/%s)*5) AS coun FROM api_song, api_song_rating WHERE api_song.song_id = api_song_rating.song_id_id GROUP BY api_song.song_id ORDER BY coun DESC LIMIT 20', [max_value_songs])
+    'SELECT api_song.*, ((SUM(api_song_rating.rating)/(COUNT(api_song_rating.rating))/%s)*5) AS coun FROM api_song, api_song_rating WHERE api_song.song_id = api_song_rating.song_id_id GROUP BY api_song.song_id ORDER BY coun DESC', [max_value_songs])
 song_ratings = Song_Rating.objects.all()
 recommendation_song = Recommendation_Songs(
     songs, songs_most_liked, song_ratings, song_by_popularity)
@@ -29,9 +29,9 @@ with connection.cursor() as cursor:
     max_value_books = cursor.fetchone()
 books = Book.objects.raw('SELECT * FROM api_book')
 books_most_liked = Book.objects.raw(
-    'SELECT api_book.*, SUM(api_book_rating.rating)/count(api_book_rating.rating) AS average FROM api_book, api_book_rating WHERE api_book.book_id=api_book_rating.book_id_id GROUP BY api_book.book_id ORDER BY average DESC LIMIT 20')
+    'SELECT api_book.*, SUM(api_book_rating.rating)/count(api_book_rating.rating) AS average FROM api_book, api_book_rating WHERE api_book.book_id=api_book_rating.book_id_id GROUP BY api_book.book_id ORDER BY average DESC')
 book_by_popularity = Book.objects.raw(
-    'SELECT api_book.*, ((SUM(api_book_rating.rating)/(COUNT(api_book_rating.rating))/%s)*5) AS coun FROM api_book, api_book_rating WHERE api_book.book_id=api_book_rating.book_id_id GROUP BY api_book.book_id ORDER BY coun DESC LIMIT 20', [max_value_books])
+    'SELECT api_book.*, ((SUM(api_book_rating.rating)/(COUNT(api_book_rating.rating))/%s)*5) AS coun FROM api_book, api_book_rating WHERE api_book.book_id=api_book_rating.book_id_id GROUP BY api_book.book_id ORDER BY coun DESC', [max_value_books])
 books_ratings = Book_Rating.objects.all()
 recommendation_book = Recommendation_Books(
     books, books_most_liked, books_ratings, book_by_popularity)
@@ -42,9 +42,9 @@ with connection.cursor() as cursor:
     max_value_movies = cursor.fetchone()
 movies = Movie.objects.raw('SELECT * FROM api_movie')
 movies_most_liked = Movie.objects.raw(
-    'SELECT api_movie.*, SUM(api_movie_rating.rating)/count(api_movie_rating.rating) AS average FROM api_movie, api_movie_rating WHERE api_movie.movie_id=api_movie_rating.movie_id_id GROUP BY api_movie.movie_id ORDER BY average DESC LIMIT 20')
+    'SELECT api_movie.*, SUM(api_movie_rating.rating)/count(api_movie_rating.rating) AS average FROM api_movie, api_movie_rating WHERE api_movie.movie_id=api_movie_rating.movie_id_id GROUP BY api_movie.movie_id ORDER BY average DESC')
 movie_by_popularity = Movie.objects.raw(
-    'SELECT api_movie.*, ((SUM(api_movie_rating.rating)/(COUNT(api_movie_rating.rating))/%s)*5) AS coun FROM api_movie, api_movie_rating WHERE api_movie.movie_id=api_movie_rating.movie_id_id GROUP BY api_movie.movie_id ORDER BY coun DESC LIMIT 20', [max_value_movies])
+    'SELECT api_movie.*, ((SUM(api_movie_rating.rating)/(COUNT(api_movie_rating.rating))/%s)*5) AS coun FROM api_movie, api_movie_rating WHERE api_movie.movie_id=api_movie_rating.movie_id_id GROUP BY api_movie.movie_id ORDER BY coun DESC', [max_value_movies])
 movies_ratings = Movie_Rating.objects.all()
 recommendation_movie = Recommendation_Movies(
     movies, movies_most_liked, movies_ratings, movie_by_popularity)
