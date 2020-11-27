@@ -124,7 +124,7 @@ def songDetail(request, pk):
 def songSearch(request):
     search = request.data['search']
     songs = Song.objects.raw(
-        'SELECT * FROM api_song WHERE song_title REGEXP %s or song_artist REGEXP %s LIMIT 20', [search, search])
+        'SELECT * FROM api_song WHERE song_id < 4000 song_title REGEXP %s or song_artist REGEXP %s LIMIT 20', [search, search])
     serializer = SongSerializer(songs, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 
