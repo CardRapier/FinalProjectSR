@@ -14,7 +14,7 @@ max_value_songs = 0
 with connection.cursor() as cursor:
     cursor.execute("SELECT MAX(rating) FROM api_song_rating")
     max_value_songs = cursor.fetchone()
-songs = Song.objects.raw('SELECT api_song.* FROM api_song')
+songs = Song.objects.raw('SELECT api_song.* FROM api_song limit 4000')
 songs_most_liked = Song.objects.raw(
     'SELECT api_song.*, SUM(api_song_rating.rating)/count(api_song_rating.rating) AS average FROM api_song, api_song_rating WHERE api_song.song_id=api_song_rating.song_id_id GROUP BY api_song.song_id ORDER BY average DESC')
 song_by_popularity = Song.objects.raw(
