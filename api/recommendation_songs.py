@@ -37,12 +37,15 @@ class Recommendation_Songs():
                         song_artist=popular_song.song_artist, song_text=popular_song.song_text)
             populars.append(song)
 
+        svd = self.SVDSong(id)
+        populars.extend(svd)
+
         content = []
-        for i in populars:
-            recommendation = self.recommenderSong(2, getattr(i, 'song_title'))
+        for i in range(0, 6):
+            recommendation = self.recommenderSong(
+                1, getattr(svd[i], 'song_title'))
             content.extend(recommendation)
         populars.extend(content)
-        populars.extend(self.SVDSong(id))
 
         return populars
 
