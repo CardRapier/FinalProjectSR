@@ -109,13 +109,12 @@ class Recommendation_Songs():
             self.songs_ratings[['user_id', 'song_id', 'rating']][:], self.reader)
 
         df_user_to_recommend = self.songs_ratings[(
-            self.songs_ratings['user_id'] == 1) & (self.songs_ratings['rating'] > 6)]
+            self.songs_ratings['user_id'] == user_id) & (self.songs_ratings['rating'] >= 4)]
 
         df_user_to_recommend = df_user_to_recommend.set_index('song_id')
         df_user_to_recommend = df_user_to_recommend.join(self.data)[
             ['song_title', 'song_artist']]
-        df_rated_from_user = df_user_to_recommend
-        print(df_rated_from_user)
+
         df_user_to_recommend = self.data.copy()
         df_user_to_recommend = df_user_to_recommend.reset_index()
         data = Dataset.load_from_df(
@@ -123,11 +122,14 @@ class Recommendation_Songs():
 
         trainset = data.build_full_trainset()
         self.svd.fit(trainset)
-
+        df_rated = self.songs_ratings[(
+            self.songs_ratings['user_id'] == user_id)]
+        df_rated = df_rated.set_index('song_id')
+        df_rated = df_rated.join(self.data)[['song_title', 'song_artist']]
         df_user_to_recommend['Estimate_Score'] = df_user_to_recommend['song_id'].apply(
-            lambda x: self.svd.predict(user_id, x).est*2)
+            lambda x: self.svd.predict(user_id, x).est)
         df_user_to_recommend = df_user_to_recommend[~df_user_to_recommend['song_title'].isin(
-            df_rated_from_user['song_title'])]
+            df_rated['song_title'])]
 
         df_user_to_recommend = df_user_to_recommend.drop('song_id', axis=1)
 

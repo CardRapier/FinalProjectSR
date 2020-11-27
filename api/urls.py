@@ -62,11 +62,27 @@ urlpatterns = [
     path('song_rating-delete/<str:pk>/',
          views.song_ratingDelete, name="song_rating-delete"),
 
-    # Recomendatinos
+    # Recommendations Songs
     path('recommendation/songs/',
          views.song_recommendation, name="songs_recommendation"),
     path('recommendation/songs/populars/',
          views.song_recommendation_populars, name="songs_recommendation_populars"),
     path('recommendation/songs/most-liked/',
          views.song_recommendation_most_liked, name="songs_recommendation_most-liked"),
+
+    # Recommendations Books
+    path('recommendation/books/',
+         views.book_recommendation, name="books_recommendation"),
+    path('recommendation/books/populars/',
+         views.book_recommendation_populars, name="books_recommendation_populars"),
+    path('recommendation/books/most-liked/',
+         views.book_recommendation_most_liked, name="books_recommendation_most-liked"),
+
+    # Recommendations Movies
+    path('recommendation/movies/',
+         views.movie_recommendation, name="movies_recommendation"),
+    path('recommendation/movies/populars/',
+         views.movie_recommendation_populars, name="movies_recommendation_populars"),
+    path('recommendation/movies/most-liked/',
+         views.movie_recommendation_most_liked, name="movies_recommendation_most-liked"),
 ]
