@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'authentication',
     'corsheaders'
 ]
-
+CORS_ORIGIN_ALLOW_ALL = True
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'authentication.backends.JWTAuthentication',
@@ -138,7 +138,7 @@ USE_TZ = True
 JWT_SECRET_KEY = env("JWT_SECRET_KEY")
 
 # CORS-HEADERS-WHITELIST
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOWED_ORIGINS = ["http://35.196.188.56"]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
