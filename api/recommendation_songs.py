@@ -132,7 +132,7 @@ class Recommendation_Songs():
 
         df_user_to_recommend['Estimate_Score'] = df_user_to_recommend['song_id'].apply(
             lambda x: self.svd.predict(user_id, x).est)
-        df_user_to_recommend = df_user_to_recommend[df_user_to_recommend['song_title'].isin(
+        df_user_to_recommend = df_user_to_recommend[~df_user_to_recommend['song_title'].isin(
             df_rated['song_title'])]
 
         df_user_to_recommend = df_user_to_recommend.drop('song_id', axis=1)
