@@ -25,7 +25,7 @@ class Recommendation_Movies():
     def recommendate(self, id):
         populars = []
         recommendated = []
-        for i in range(0, 1):
+        for i in range(0, 3):
             ran = 0
             while (ran in recommendated):
                 ran = random.randint(0, len(self.most_liked) - 1)
@@ -36,20 +36,22 @@ class Recommendation_Movies():
                           movie_overview=popular_movie.movie_overview, movie_genres=popular_movie.movie_genres)
             populars.append(movie)
 
+        svd = self.SVDMovie(id)
+        populars.extend(svd)
+
         content = []
-        for i in populars:
+        for i in range(0, 6):
             recommendation = self.recommenderMovie(
-                2, getattr(i, 'movie_title'))
+                1, getattr(svd[i], 'movie_title'))
             content.extend(recommendation)
         populars.extend(content)
-        populars.extend(self.SVDMovie(id))
 
         return populars
 
     def recommendate_most_liked(self):
         most_liked = []
         recommendated = []
-        for i in range(0, len(self.most_liked)):
+        for i in range(0, 20):
             ran = 0
             while (ran in recommendated):
                 ran = random.randint(0, len(self.most_liked) - 1)
@@ -63,7 +65,7 @@ class Recommendation_Movies():
     def recommendate_populars(self):
         populars = []
         recommendated = []
-        for i in range(0, len(self.popular_movies)):
+        for i in range(0, 20):
             ran = 0
             while (ran in recommendated):
                 ran = random.randint(0, len(self.popular_movies) - 1)

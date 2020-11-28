@@ -26,7 +26,7 @@ class Recommendation_Books():
     def recommendate(self, id):
         populars = []
         recommendated = []
-        for i in range(0, 1):
+        for i in range(0, 3):
             ran = 0
             while (ran in recommendated):
                 ran = random.randint(0, len(self.most_liked) - 1)
@@ -37,19 +37,22 @@ class Recommendation_Books():
                         book_authors=popular_book.book_authors, book_overview=popular_book.book_overview, book_genres=popular_book.book_genres)
             populars.append(book)
 
+        svd = self.SVDBook(id)
+        populars.extend(svd)
+
         content = []
-        for i in populars:
-            recommendation = self.recommenderBook(2, getattr(i, 'book_title'))
+        for i in range(0, 6):
+            recommendation = self.recommenderBook(
+                1, getattr(svd[i], 'book_title'))
             content.extend(recommendation)
         populars.extend(content)
-        populars.extend(self.SVDBook(id))
 
         return populars
 
     def recommendate_most_liked(self):
         most_liked = []
         recommendated = []
-        for i in range(0, len(self.most_liked)):
+        for i in range(0, 20):
             ran = 0
             while (ran in recommendated):
                 ran = random.randint(0, len(self.most_liked) - 1)
@@ -63,7 +66,7 @@ class Recommendation_Books():
     def recommendate_populars(self):
         populars = []
         recommendated = []
-        for i in range(0, len(self.popular_books)):
+        for i in range(0, 20):
             ran = 0
             while (ran in recommendated):
                 ran = random.randint(0, len(self.popular_books) - 1)
